@@ -27,4 +27,12 @@ func TestCodePoints(t *testing.T) {
 
 	println("contains:", r.ContainsEmoji(str))
 	println("contains:", r.ContainsEmoji("(123English中あ한국어)"))
+
+	r2, err := New(provider.NewSliceProvider())
+	if err != nil {
+		panic(err)
+	}
+	for _, e := range r2.FindAllEmojis(str) {
+		println("emoji:", e.String())
+	}
 }
