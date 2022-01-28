@@ -7,7 +7,7 @@ import (
 type Emoji []rune
 
 type Provider interface {
-	CodePoints() ([][]rune, error)
+	CodePoints() (codePoints [][]rune, err error)
 }
 
 // String The string presentation of Emoji.
@@ -19,8 +19,26 @@ type Repository struct {
 	tree *trie.Trie
 }
 
+// FindOne Find the first emoji in a string,
+// return nil when no emoji found.
+func (r *Repository) FindOne(s string) Emoji {
+	var (
+		rs     = []rune(s)
+		length = len(rs)
+		i      int
+	)
+	for i < length {
+		emoji := r.tree.MatchLong(rs[i:])
+		if emoji != nil {
+			return emoji
+		}
+		i++
+	}
+	return nil
+}
+
 // FindAll Find out all the emojis in a string,
-// return nil when nothing found.
+// return nil when no emoji found.
 func (r *Repository) FindAll(s string) []Emoji {
 	var (
 		rs     = []rune(s)
@@ -41,9 +59,9 @@ func (r *Repository) FindAll(s string) []Emoji {
 }
 
 // New Load code points from Provider into a trie.
-func New(provider Provider) (*Repository, error) {
+func New(p Provider) (*Repository, error) {
 	tree := trie.New()
-	codePoints, err := provider.CodePoints()
+	codePoints, err := p.CodePoints()
 	if err != nil {
 		return nil, err
 	}

@@ -61,6 +61,35 @@ func (t *Trie) Exist(rs []rune) bool {
 	return node.matched
 }
 
+// MatchShort Find a rune slice in the trie,
+// return the shortest matched rune slice.
+func (t *Trie) MatchShort(rs []rune) []rune {
+	var (
+		node  = t
+		ok    bool
+		runes []rune
+	)
+	// find the runes in the trie
+	for _, r := range rs {
+		node, ok = node.children[r]
+		if !ok {
+			break
+		}
+		if node.matched {
+			runes = append(runes, r)
+			break
+		} else {
+			// minus stands for a rune unmatched
+			runes = append(runes, -r)
+		}
+	}
+
+	if len(runes) == 0 || runes[len(runes)-1] < 0 {
+		return nil
+	}
+	return runes
+}
+
 // MatchLong Find a rune slice in the trie greedily,
 // return the longest matched rune slice.
 func (t *Trie) MatchLong(rs []rune) []rune {

@@ -71,6 +71,7 @@ func DecodeFile(filename string) ([][]rune, error) {
 	return rss, nil
 }
 
+// FileProvider Provides code points from the official documents.
 type FileProvider struct {
 	filenames []string
 }
