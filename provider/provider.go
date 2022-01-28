@@ -1,4 +1,4 @@
-package sequence
+package provider
 
 import (
 	"bufio"
@@ -69,4 +69,24 @@ func DecodeFile(filename string) ([][]rune, error) {
 		rss = append(rss, DecodeText(strings.TrimSpace(fields[0]))...)
 	}
 	return rss, nil
+}
+
+type FileProvider struct {
+	filenames []string
+}
+
+func (p *FileProvider) CodePoints() ([][]rune, error) {
+	var codePoints [][]rune
+	for _, filename := range p.filenames {
+		rss, err := DecodeFile(filename)
+		if err != nil {
+			return nil, err
+		}
+		codePoints = append(codePoints, rss...)
+	}
+	return codePoints, nil
+}
+
+func NewFileProvider(filenames ...string) *FileProvider {
+	return &FileProvider{filenames: filenames}
 }

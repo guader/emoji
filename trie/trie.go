@@ -61,9 +61,9 @@ func (t *Trie) Exist(rs []rune) bool {
 	return node.matched
 }
 
-// Match Find a rune slice in the trie greedily,
+// MatchLong Find a rune slice in the trie greedily,
 // return the longest matched rune slice.
-func (t *Trie) Match(rs []rune) []rune {
+func (t *Trie) MatchLong(rs []rune) []rune {
 	var (
 		node  = t
 		ok    bool

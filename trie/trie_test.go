@@ -14,6 +14,6 @@ func TestTrie(t *testing.T) {
 	search := append(rs, []rune(" Tire")...)
 	for i := len(search); i > 0; i-- {
 		target := search[:i]
-		println(string(target), "(", root.Exist(target), ")", "(", string(root.Match(target)), ")")
+		println(string(target), "(", root.Exist(target), ")", "(", string(root.MatchLong(target)), ")")
 	}
 }

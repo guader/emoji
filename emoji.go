@@ -1,24 +1,27 @@
 package emoji
 
 import (
-	"github.com/guader/emoji/sequence"
 	"github.com/guader/emoji/trie"
 )
 
 type Emoji []rune
+
+type Provider interface {
+	CodePoints() ([][]rune, error)
+}
 
 // String The string presentation of Emoji.
 func (e Emoji) String() string {
 	return string(e)
 }
 
-type CodePoints struct {
+type Repository struct {
 	tree *trie.Trie
 }
 
-// Match Find out all the emojis in a string,
+// FindAll Find out all the emojis in a string,
 // return nil when nothing found.
-func (cp *CodePoints) Match(s string) []Emoji {
+func (r *Repository) FindAll(s string) []Emoji {
 	var (
 		rs     = []rune(s)
 		length = len(rs)
@@ -26,7 +29,7 @@ func (cp *CodePoints) Match(s string) []Emoji {
 		emojis []Emoji
 	)
 	for i < length {
-		emoji := cp.tree.Match(rs[i:])
+		emoji := r.tree.MatchLong(rs[i:])
 		if emoji == nil {
 			i++
 		} else {
@@ -37,19 +40,15 @@ func (cp *CodePoints) Match(s string) []Emoji {
 	return emojis
 }
 
-// New Load code points from official files into a trie.
-func New(filenames ...string) (*CodePoints, error) {
+// New Load code points from Provider into a trie.
+func New(provider Provider) (*Repository, error) {
 	tree := trie.New()
-	for _, filename := range filenames {
-		rss, err := sequence.DecodeFile(filename)
-		if err != nil {
-			return nil, err
-		}
-		for _, rs := range rss {
-			tree.Insert(rs)
-		}
+	codePoints, err := provider.CodePoints()
+	if err != nil {
+		return nil, err
 	}
-	return &CodePoints{
-		tree: tree,
-	}, nil
+	for _, codePoint := range codePoints {
+		tree.Insert(codePoint)
+	}
+	return &Repository{tree: tree}, nil
 }
