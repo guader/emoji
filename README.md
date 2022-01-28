@@ -24,7 +24,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	emojis := r.FindAll("(⏩..⏬)(👨‍👩‍👧‍👦)(⏩⏬)123English中あ한국어")
+	emojis := r.FindAllEmojis("(⏩..⏬)(👨‍👩‍👧‍👦)(⏩⏬)123English中あ한국어")
 	for _, e := range emojis {
 		println(e.String())
 	}
