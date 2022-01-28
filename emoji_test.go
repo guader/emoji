@@ -17,11 +17,14 @@ func TestCodePoints(t *testing.T) {
 
 	const str = "(⏩..⏬)(👨‍👩‍👧‍👦)(⏩⏬)123English中あ한국어"
 
-	emojis := r.FindAll(str)
+	emojis := r.FindAllEmojis(str)
 	for _, e := range emojis {
-		println("all: ", e.String())
+		println("all:", e.String())
 	}
 
-	e := r.FindOne(str)
-	println("one: ", e.String())
+	e := r.FindOneEmoji(str)
+	println("one:", e.String())
+
+	println("contains:", r.ContainsEmoji(str))
+	println("contains:", r.ContainsEmoji("(123English中あ한국어)"))
 }

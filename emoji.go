@@ -19,9 +19,25 @@ type Repository struct {
 	tree *trie.Trie
 }
 
-// FindOne Find the first emoji in a string,
+// ContainsEmoji Test if a string contains any emoji.
+func (r *Repository) ContainsEmoji(s string) bool {
+	var (
+		rs     = []rune(s)
+		length = len(rs)
+		i      int
+	)
+	for i < length {
+		if r.tree.MatchShort(rs[i:]) != nil {
+			return true
+		}
+		i++
+	}
+	return false
+}
+
+// FindOneEmoji Find the first emoji in a string,
 // return nil when no emoji found.
-func (r *Repository) FindOne(s string) Emoji {
+func (r *Repository) FindOneEmoji(s string) Emoji {
 	var (
 		rs     = []rune(s)
 		length = len(rs)
@@ -37,9 +53,9 @@ func (r *Repository) FindOne(s string) Emoji {
 	return nil
 }
 
-// FindAll Find out all the emojis in a string,
+// FindAllEmojis Find out all the emojis in a string,
 // return nil when no emoji found.
-func (r *Repository) FindAll(s string) []Emoji {
+func (r *Repository) FindAllEmojis(s string) []Emoji {
 	var (
 		rs     = []rune(s)
 		length = len(rs)

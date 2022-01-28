@@ -1,19 +1,20 @@
 package trie
 
 import (
+	"fmt"
 	"testing"
 )
 
 func TestTrie(t *testing.T) {
-	rs := []rune("Hello World!")
 	root := New()
-	root.Insert(rs)
+	root.Insert([]rune("Hello"))
+	root.Insert([]rune("Hello World"))
+	fmt.Println("worlds: Hello, World")
 
-	println(root.String())
-
-	search := append(rs, []rune(" Tire")...)
-	for i := len(search); i > 0; i-- {
-		target := search[:i]
-		println(string(target), "(", root.Exist(target), ")", "(", string(root.MatchLong(target)), ")")
+	str := []rune("Hello World!")
+	for i := len(str); i > 0; i-- {
+		source := str[:i]
+		fmt.Printf("findIn: %s, exist: %t, short: %s, long: %s\n",
+			string(source), root.Exist(source), string(root.MatchShort(source)), string(root.MatchLong(source)))
 	}
 }

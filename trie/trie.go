@@ -87,7 +87,16 @@ func (t *Trie) MatchShort(rs []rune) []rune {
 	if len(runes) == 0 || runes[len(runes)-1] < 0 {
 		return nil
 	}
-	return runes
+
+	var result []rune
+	for _, r := range runes {
+		if r < 0 {
+			result = append(result, -r)
+		} else {
+			result = append(result, r)
+		}
+	}
+	return result
 }
 
 // MatchLong Find a rune slice in the trie greedily,
